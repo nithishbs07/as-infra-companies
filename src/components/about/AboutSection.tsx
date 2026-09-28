@@ -30,7 +30,7 @@ const missionPillars = [
 
 export default function AboutSection() {
   return (
-    <section id="about" className="pt-32 pb-16 md:pt-48 md:pb-32 bg-[#020202] relative z-20 overflow-hidden">
+    <section id="about" className="pt-32 pb-16 md:pt-48 md:pb-32 bg-transparent relative z-20 overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           

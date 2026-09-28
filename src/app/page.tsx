@@ -9,6 +9,7 @@ import ServicesSection from '@/components/services/ServicesSection';
 import WorksSection from '@/components/works/WorksSection';
 import ProjectsSection from '@/components/projects/ProjectsSection';
 import ApproachSection from '@/components/approach/ApproachSection';
+import InfrastructureImpact from '@/components/scrolly/InfrastructureImpact';
 import ContactSection from '@/components/contact/ContactSection';
 import Footer from '@/components/footer/Footer';
 import WhatsAppButton from '@/components/ui/WhatsAppButton';
@@ -26,7 +27,6 @@ export default function Home() {
       .then(data => setManifest(data))
       .catch(err => {
         console.error("Failed to load manifest", err);
-        // Fallback mock manifest so it doesn't break if not present
         setManifest({
           frameCount: 150,
           fps: 15,
@@ -38,17 +38,21 @@ export default function Home() {
   }, []);
 
   return (
-    <main className="bg-black min-h-screen text-white selection:bg-[var(--color-as-yellow)] selection:text-black">
+    <main className="bg-black min-h-[100dvh] text-white selection:bg-[var(--color-as-yellow)] selection:text-black">
       {!bootComplete && <BootScreen onComplete={() => setBootComplete(true)} />}
       
       <NavBar />
       {manifest && <HeroScene manifest={manifest} />}
-      <AboutSection />
-      <ServicesSection />
-      <WorksSection />
-      <ProjectsSection />
-      <ApproachSection />
-      <ContactSection />
+      
+      <InfrastructureImpact>
+        <AboutSection />
+        <ServicesSection />
+        <WorksSection />
+        <ProjectsSection />
+        <ApproachSection />
+        <ContactSection />
+      </InfrastructureImpact>
+      
       <Footer />
       <SoundControl />
       <WhatsAppButton />

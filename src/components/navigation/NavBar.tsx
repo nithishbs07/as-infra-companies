@@ -19,6 +19,15 @@ export default function NavBar() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [mobileMenuOpen]);
+
   const navLinks = [
     { name: 'HOME', href: '/' },
     { name: 'ABOUT', href: '/about' },
@@ -67,10 +76,10 @@ export default function NavBar() {
 
           {/* Mobile Toggle */}
           <button 
-            className="md:hidden text-white z-50 relative"
+            className="md:hidden text-white z-50 relative p-4 -mr-4"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={28} /> : <Menu size={28} />}
           </button>
         </div>
       </motion.nav>

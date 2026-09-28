@@ -1,0 +1,8 @@
+{
+  "frameCount": 150,
+  "width": 1920,
+  "height": 1080,
+  "fps": 15,
+  "duration": 10,
+  "pattern": "/sequence-impact/frame-%04d.jpg"
+}

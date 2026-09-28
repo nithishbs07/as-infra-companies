@@ -8,13 +8,13 @@ export default function SoundControl() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setMounted(true);
-    const pref = sessionStorage.getItem('soundEnabled');
-    if (pref === 'true') {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSoundEnabled(true);
-    }
+    setTimeout(() => {
+      setMounted(true);
+      const pref = sessionStorage.getItem('soundEnabled');
+      if (pref === 'true') {
+        setSoundEnabled(true);
+      }
+    }, 0);
 
     const handlePrefChange = () => {
       const updated = sessionStorage.getItem('soundEnabled');

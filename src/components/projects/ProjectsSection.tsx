@@ -29,7 +29,7 @@ const gallery = [
 
 export default function ProjectsSection() {
   return (
-    <section id="projects" className="py-32 md:py-48 bg-[#05070A]">
+    <section id="projects" className="py-32 md:py-48 bg-transparent">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>

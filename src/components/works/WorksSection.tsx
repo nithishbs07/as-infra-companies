@@ -23,7 +23,7 @@ export default function WorksSection() {
   const [hoveredIndex, setHoveredIndex] = useState<number>(0);
 
   return (
-    <section className="py-32 bg-[#05070A] relative overflow-hidden">
+    <section className="py-32 bg-transparent relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-24 flex flex-col md:flex-row md:items-end justify-between gap-8">
           <div>
@@ -43,14 +43,38 @@ export default function WorksSection() {
               <div 
                 key={item.id}
                 onMouseEnter={() => setHoveredIndex(i)}
-                className={`py-6 md:py-8 border-b border-white/10 flex items-center gap-8 cursor-pointer transition-colors duration-500 ${hoveredIndex === i ? 'bg-white/[0.03] px-4 -mx-4' : 'hover:bg-white/[0.01]'}`}
+                onClick={() => setHoveredIndex(i)}
+                className={`py-6 md:py-8 border-b border-white/10 flex flex-col cursor-pointer transition-colors duration-500 ${hoveredIndex === i ? 'bg-white/[0.03] px-4 -mx-4' : 'hover:bg-white/[0.01]'}`}
               >
-                <span className={`font-mono text-sm tracking-widest transition-colors duration-500 ${hoveredIndex === i ? 'text-[var(--color-as-yellow)]' : 'text-white/20'}`}>
-                  {item.id}
-                </span>
-                <h3 className={`text-xl md:text-3xl font-light tracking-wide transition-colors duration-500 ${hoveredIndex === i ? 'text-white' : 'text-white/60'}`}>
-                  {item.title}
-                </h3>
+                <div className="flex items-center gap-8">
+                  <span className={`font-mono text-sm tracking-widest transition-colors duration-500 ${hoveredIndex === i ? 'text-[var(--color-as-yellow)]' : 'text-white/20'}`}>
+                    {item.id}
+                  </span>
+                  <h3 className={`text-xl md:text-3xl font-light tracking-wide transition-colors duration-500 ${hoveredIndex === i ? 'text-white' : 'text-white/60'}`}>
+                    {item.title}
+                  </h3>
+                </div>
+
+                {/* Mobile Inline Image Reveal */}
+                <AnimatePresence>
+                  {hoveredIndex === i && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0, marginTop: 0 }}
+                      animate={{ height: "auto", opacity: 1, marginTop: 24 }}
+                      exit={{ height: 0, opacity: 0, marginTop: 0 }}
+                      className="lg:hidden relative w-full aspect-[4/3] overflow-hidden bg-[#0A1424]"
+                    >
+                      <Image 
+                        src={item.img}
+                        alt={item.title}
+                        fill
+                        sizes="100vw"
+                        className="object-cover opacity-80"
+                      />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
             ))}
           </div>

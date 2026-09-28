@@ -27,7 +27,7 @@ const processSteps = [
 
 export default function ApproachSection() {
   return (
-    <section id="approach" className="py-32 bg-[#020202] border-t border-white/5 relative overflow-hidden">
+    <section id="approach" className="py-32 bg-transparent border-t border-white/5 relative overflow-hidden">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-24 text-center">
           <span className="text-[var(--color-as-yellow)] tracking-[0.3em] text-xs font-bold uppercase mb-4 block">Process</span>

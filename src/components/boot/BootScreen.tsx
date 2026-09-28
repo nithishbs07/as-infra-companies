@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface BootScreenProps {
@@ -13,6 +13,7 @@ export default function BootScreen({ onComplete }: BootScreenProps) {
   useEffect(() => {
     const hasBooted = sessionStorage.getItem('hasBooted');
     if (hasBooted === 'true') {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStep('DONE');
       onComplete();
     }
@@ -33,10 +34,16 @@ export default function BootScreen({ onComplete }: BootScreenProps) {
       }, 8500);
     }
     return () => clearTimeout(fallback);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [step]);
+
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   const handleEnter = () => {
     setStep('PLAYING');
+    if (videoRef.current) {
+       videoRef.current.play().catch(() => console.log('Autoplay blocked'));
+    }
   };
 
   if (step === 'DONE') return null;
@@ -50,6 +57,14 @@ export default function BootScreen({ onComplete }: BootScreenProps) {
         transition={{ duration: 0.8, ease: "easeInOut" }}
         className="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black"
       >
+        <video
+          ref={videoRef}
+          src="/boot/logo-reveal-voiced.mp4"
+          playsInline
+          onEnded={handleVideoEnd}
+          className={`w-full h-full object-cover origin-center ${step === 'PLAYING' ? 'block' : 'hidden'}`}
+        />
+
         {step === 'WAITING' && (
           <motion.button
             initial={{ opacity: 0, y: 10 }}
@@ -61,16 +76,6 @@ export default function BootScreen({ onComplete }: BootScreenProps) {
           >
             Enter Experience
           </motion.button>
-        )}
-
-        {step === 'PLAYING' && (
-          <video
-            src="/boot/logo-reveal-voiced.mp4"
-            autoPlay
-            playsInline
-            onEnded={handleVideoEnd}
-            className="w-full h-full object-cover origin-center"
-          />
         )}
       </motion.div>
     </AnimatePresence>

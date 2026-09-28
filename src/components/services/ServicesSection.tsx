@@ -42,7 +42,7 @@ const services = [
 
 export default function ServicesSection() {
   return (
-    <section id="services" className="py-32 md:py-48 bg-[var(--color-as-black)]">
+    <section id="services" className="py-32 md:py-48 bg-transparent">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-24">
           <span className="text-[var(--color-as-yellow)] tracking-[0.3em] text-xs font-bold uppercase mb-4 block">Our Expertise</span>

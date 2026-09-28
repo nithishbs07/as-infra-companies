@@ -13,9 +13,9 @@ interface ScrollyCanvasProps {
 export default function ScrollyCanvas({ scrollYProgress, manifest }: ScrollyCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const frameManagerRef = useRef<FrameManager | null>(null);
+  const renderRef = useRef<((latest: number) => void) | null>(null);
   
   useEffect(() => {
-    // Initialize frame manager only on client
     frameManagerRef.current = new FrameManager(manifest);
     frameManagerRef.current.preloadNext();
   }, [manifest]);
@@ -24,29 +24,24 @@ export default function ScrollyCanvas({ scrollYProgress, manifest }: ScrollyCanv
     if (!canvasRef.current || !frameManagerRef.current) return;
 
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d', { alpha: false }); // alpha: false for performance
+    const ctx = canvas.getContext('2d', { alpha: false });
     if (!ctx) return;
 
     const render = (latest: number) => {
-      // Map progress to frame index
       const totalFrames = manifest.frameCount;
       let frameIndex = Math.floor(latest * totalFrames);
-      // Ensure index is within bounds [1, totalFrames]
       frameIndex = Math.max(1, Math.min(frameIndex, totalFrames));
 
       const manager = frameManagerRef.current;
       if (!manager) return;
 
       const img = manager.getFrame(frameIndex);
-
-      // If exact frame isn't loaded yet, try to find nearest loaded frame
       let renderImg = img;
       if (!renderImg) {
         renderImg = manager.getFrame(1); 
       }
 
       if (renderImg) {
-        // Draw with object-cover style logic
         const { width, height } = canvas;
         const imgRatio = renderImg.width / renderImg.height;
         const canvasRatio = width / height;
@@ -61,7 +56,6 @@ export default function ScrollyCanvas({ scrollYProgress, manifest }: ScrollyCanv
           drawWidth = (height * imgRatio) * 1.2;
         }
         
-        // Center it
         const offsetX = (width - drawWidth) / 2;
         const offsetY = (height - drawHeight) / 2;
 
@@ -71,43 +65,50 @@ export default function ScrollyCanvas({ scrollYProgress, manifest }: ScrollyCanv
       }
     };
 
-    // Subscribing directly avoids React renders
+    renderRef.current = render;
+
     const unsubscribe = scrollYProgress.on("change", (latest) => {
       requestAnimationFrame(() => render(latest));
     });
     
-    // Initial render
     render(scrollYProgress.get());
 
     return () => unsubscribe();
   }, [scrollYProgress, manifest]);
 
   useEffect(() => {
+    let timeout: NodeJS.Timeout;
     const handleResize = () => {
-      if (canvasRef.current) {
-        // Handle high DPI displays
-        const pixelRatio = window.devicePixelRatio || 1;
-        canvasRef.current.width = window.innerWidth * pixelRatio;
-        canvasRef.current.height = window.innerHeight * pixelRatio;
-        canvasRef.current.style.width = `${window.innerWidth}px`;
-        canvasRef.current.style.height = `${window.innerHeight}px`;
-        
-        // Force a re-render of current frame by slightly dispatching a mock event or just letting scroll handle it
-        // The dependency array should probably include dimensions but for now we rely on scroll updates
-      }
+      clearTimeout(timeout);
+      timeout = setTimeout(() => {
+        if (canvasRef.current) {
+          const pixelRatio = window.devicePixelRatio || 1;
+          canvasRef.current.width = window.innerWidth * pixelRatio;
+          canvasRef.current.height = window.innerHeight * pixelRatio;
+          canvasRef.current.style.width = `${window.innerWidth}px`;
+          canvasRef.current.style.height = `${window.innerHeight}px`;
+          
+          if (renderRef.current) {
+             requestAnimationFrame(() => renderRef.current!(scrollYProgress.get()));
+          }
+        }
+      }, 100);
     };
 
-    handleResize(); // Initial setup
-    window.addEventListener('resize', handleResize);
-    return () => window.removeEventListener('resize', handleResize);
-  }, []);
+    handleResize(); 
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => {
+      clearTimeout(timeout);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [scrollYProgress]);
 
   return (
     <>
       <canvas
         ref={canvasRef}
         className="w-full h-full object-cover"
-        style={{ width: '100vw', height: '100vh' }}
+        style={{ width: '100vw', height: '100dvh' }}
       />
     </>
   );

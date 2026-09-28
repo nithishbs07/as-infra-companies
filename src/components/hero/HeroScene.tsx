@@ -22,7 +22,7 @@ export default function HeroScene({ manifest }: HeroSceneProps) {
 
   if (prefersReducedMotion) {
     return (
-      <div className="relative w-full h-screen bg-black flex flex-col items-center justify-center">
+      <div className="relative w-full h-[100dvh] bg-black flex flex-col items-center justify-center">
         <Image 
           src={manifest.pattern.replace('%04d', '0150')}
           alt="AS Infra Construction"
@@ -39,7 +39,7 @@ export default function HeroScene({ manifest }: HeroSceneProps) {
 
   return (
     <div ref={containerRef} className="relative w-full h-[1000vh] bg-black">
-      <div className="sticky top-0 w-full h-screen overflow-hidden">
+      <div className="sticky top-0 w-full h-[100dvh] overflow-hidden">
         <ScrollyCanvas scrollYProgress={scrollYProgress} manifest={manifest} />
         <HeroOverlay scrollYProgress={scrollYProgress} />
       </div>

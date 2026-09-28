@@ -30,7 +30,7 @@ export default function GalleryView() {
   const filtered = activeTab === 'ALL' ? galleryItems : galleryItems.filter(item => item.category === activeTab);
 
   return (
-    <section className="py-24 bg-[#05070A] min-h-screen">
+    <section className="py-24 bg-[#05070A] min-h-[100dvh]">
       <div className="container mx-auto px-6 md:px-12">
         <div className="mb-16">
           <h1 className="text-5xl md:text-7xl font-light text-white tracking-tighter mb-12">GALLERY</h1>

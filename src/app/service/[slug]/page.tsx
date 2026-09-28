@@ -35,14 +35,14 @@ export default async function ServicePage({ params }: { params: Promise<{ slug: 
 
   if (!service) {
     return (
-      <main className="bg-black min-h-screen text-white flex items-center justify-center">
+      <main className="bg-black min-h-[100dvh] text-white flex items-center justify-center">
         <h1 className="text-4xl">Service Not Found</h1>
       </main>
     );
   }
 
   return (
-    <main className="bg-[var(--color-as-black)] min-h-screen text-white selection:bg-[var(--color-as-yellow)] selection:text-black">
+    <main className="bg-[var(--color-as-black)] min-h-[100dvh] text-white selection:bg-[var(--color-as-yellow)] selection:text-black">
       <NavBar />
       
       {/* Cinematic Hero */}
