@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@source "../../src";
 
 :root {
   /* AS Infra Design System */
