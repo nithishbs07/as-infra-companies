@@ -1,0 +1,7 @@
+<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="en-US">
+<voice name="en-US-BrianNeural">
+<prosody rate="-5%" pitch="-2%">
+Welcome to A S, Infra Companies. <break time="1500ms" /> Building today, for a better tomorrow.
+</prosody>
+</voice>
+</speak>
